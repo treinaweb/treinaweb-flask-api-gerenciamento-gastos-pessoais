@@ -3,6 +3,7 @@ from ..schemas import conta_schema
 from flask import request, make_response, jsonify
 from ..entidades import conta
 from ..services import conta_service
+from api import api
 
 class ContaList(Resource):
     def post(self):
@@ -16,7 +17,9 @@ class ContaList(Resource):
             saldo = request.json["saldo"]
             conta_nova = conta.Conta(nome=nome, descricao=descricao, saldo=saldo)
             result = conta_service.cadastrar_conta(conta_nova)
-            return make_response(jsonify(result), 201)
+            return make_response(cs.jsonify(result), 201)
 
 class ContaDetail(Resource):
     pass
+
+api.add_resource(ContaList, '/contas')
