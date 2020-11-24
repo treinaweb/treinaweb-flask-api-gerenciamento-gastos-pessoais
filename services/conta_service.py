@@ -10,3 +10,7 @@ def cadastrar_conta(conta):
 def listar_contas():
     contas = conta_model.Conta.query.all()
     return contas
+
+def listar_conta_id(id):
+    conta = conta_model.Conta.query.filter_by(id=id).first()
+    return conta

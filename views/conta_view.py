@@ -24,7 +24,14 @@ class ContaList(Resource):
             result = conta_service.cadastrar_conta(conta_nova)
             return make_response(cs.jsonify(result), 201)
 
+
 class ContaDetail(Resource):
-    pass
+    def get(self, id):
+        conta = conta_service.listar_conta_id(id)
+        if conta is None:
+            return make_response(jsonify("Conta não encontrada"), 404)
+        cs = conta_schema.ContaSchema()
+        return make_response(cs.jsonify(conta), 200)
 
 api.add_resource(ContaList, '/contas')
+api.add_resource(ContaDetail, '/contas/<int:id>')
