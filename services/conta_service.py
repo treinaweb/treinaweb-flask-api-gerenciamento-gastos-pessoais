@@ -6,3 +6,7 @@ def cadastrar_conta(conta):
     db.session.add(conta_bd)
     db.session.commit()
     return conta_bd
+
+def listar_contas():
+    contas = conta_model.Conta.query.all()
+    return contas
