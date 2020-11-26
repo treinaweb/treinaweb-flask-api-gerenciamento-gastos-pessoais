@@ -33,5 +33,13 @@ class ContaDetail(Resource):
         cs = conta_schema.ContaSchema()
         return make_response(cs.jsonify(conta), 200)
 
+    def delete(self, id):
+        conta = conta_service.listar_conta_id(id)
+        if conta is None:
+            return make_response(jsonify("Conta não encontrada"), 404)
+        conta_service.remover_conta(conta)
+        return make_response('', 204)
+
+
 api.add_resource(ContaList, '/contas')
 api.add_resource(ContaDetail, '/contas/<int:id>')

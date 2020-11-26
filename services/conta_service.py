@@ -14,3 +14,7 @@ def listar_contas():
 def listar_conta_id(id):
     conta = conta_model.Conta.query.filter_by(id=id).first()
     return conta
+
+def remover_conta(conta):
+    db.session.delete(conta)
+    db.session.commit()
