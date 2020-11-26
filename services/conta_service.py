@@ -18,3 +18,10 @@ def listar_conta_id(id):
 def remover_conta(conta):
     db.session.delete(conta)
     db.session.commit()
+
+def editar_conta(conta, conta_nova):
+    conta.nome = conta_nova.nome
+    conta.descricao = conta_nova.descricao
+    conta.saldo = conta_nova.saldo
+    db.session.commit()
+    return conta
