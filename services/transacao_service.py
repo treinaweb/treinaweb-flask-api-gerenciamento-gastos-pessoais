@@ -1,11 +1,13 @@
 from ..models import transacao_model
 from api import db
+from .conta_service import alterar_saldo_conta
 
 def cadastrar_transacao(transacao):
     transacao_bd = transacao_model.Transacao(nome=transacao.nome, descricao=transacao.descricao,
                                     valor=transacao.valor, tipo=transacao.tipo, conta_id=transacao.conta)
     db.session.add(transacao_bd)
     db.session.commit()
+    alterar_saldo_conta(transacao.conta, transacao)
     return transacao_bd
 
 def listar_transacoes():
