@@ -3,7 +3,7 @@ from api import api
 from ..schemas import transacao_schema
 from flask import request, make_response, jsonify
 from ..entidades import transacao
-from ..services import transacao_service
+from ..services import transacao_service, conta_service
 
 class TransacaoList(Resource):
     def get(self):
@@ -21,10 +21,14 @@ class TransacaoList(Resource):
             descricao = request.json["descricao"]
             valor = request.json["valor"]
             tipo = request.json["tipo"]
-            transacao_nova = transacao.Transacao(nome=nome, descricao=descricao,
-                                        valor=valor, tipo=tipo)
-            result = transacao_service.cadastrar_transacao(transacao_nova)
-            return make_response(cs.jsonify(result), 201)
+            conta = request.json["conta_id"]
+            if conta_service.listar_conta_id(conta) is None:
+                return make_response("Conta não existe", 404)
+            else:
+                transacao_nova = transacao.Transacao(nome=nome, descricao=descricao,
+                                            valor=valor, tipo=tipo, conta=conta)
+                result = transacao_service.cadastrar_transacao(transacao_nova)
+                return make_response(cs.jsonify(result), 201)
 
 class TransacaoDetail(Resource):
     def get(self, id):
@@ -47,10 +51,14 @@ class TransacaoDetail(Resource):
             descricao = request.json["descricao"]
             valor = request.json["valor"]
             tipo = request.json["tipo"]
-            transacao_nova = transacao.Transacao(nome=nome, descricao=descricao,
-                                        valor=valor, tipo=tipo)
-            transacao_atualizada = transacao_service.editar_transacao(transacao_bd, transacao_nova)
-            return make_response(cs.jsonify(transacao_atualizada), 200)
+            conta = request.json["conta_id"]
+            if conta_service.listar_conta_id(conta) is None:
+                return make_response("Conta não existe", 404)
+            else:
+                transacao_nova = transacao.Transacao(nome=nome, descricao=descricao,
+                                            valor=valor, tipo=tipo, conta=conta)
+                transacao_atualizada = transacao_service.editar_transacao(transacao_bd, transacao_nova)
+                return make_response(cs.jsonify(transacao_atualizada), 200)
 
     def delete(self, id):
         transacao = transacao_service.listar_transacao_id(id)

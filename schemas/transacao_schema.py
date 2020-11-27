@@ -12,3 +12,4 @@ class TransacaoSchema(ma.SQLAlchemyAutoSchema):
     descricao = fields.String(required=True)
     valor = fields.Float(required=True)
     tipo = fields.String(required=True)
+    conta_id = fields.Integer(required=True)

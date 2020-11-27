@@ -3,7 +3,7 @@ from api import db
 
 def cadastrar_transacao(transacao):
     transacao_bd = transacao_model.Transacao(nome=transacao.nome, descricao=transacao.descricao,
-                                    valor=transacao.valor, tipo=transacao.tipo)
+                                    valor=transacao.valor, tipo=transacao.tipo, conta_id=transacao.conta)
     db.session.add(transacao_bd)
     db.session.commit()
     return transacao_bd
@@ -21,6 +21,7 @@ def editar_transacao(transacao_bd, transacao_nova):
     transacao_bd.descricao = transacao_nova.descricao
     transacao_bd.valor = transacao_nova.valor
     transacao_bd.tipo = transacao_nova.tipo
+    transacao_bd.conta = transacao_nova.conta
     db.session.commit()
     return transacao_bd
 
