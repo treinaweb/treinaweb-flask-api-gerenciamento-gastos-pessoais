@@ -7,3 +7,9 @@ def cadastrar_usuario(usuario):
     db.session.add(usuario_db)
     db.session.commit()
     return usuario_db
+
+def listar_usuario_email(email):
+    return usuario_model.Usuario.query.filter_by(email=email).first()
+
+def listar_usuario_id(id):
+    return usuario_model.Usuario.query.filter_by(id=id).first()
