@@ -14,4 +14,4 @@ mi = Migrate(app, db)
 api = Api(app)
 
 from .models import conta_model, transacao_model, usuario_model
-from .views import conta_view, transacao_view
+from .views import conta_view, transacao_view, usuario_view
