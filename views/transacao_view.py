@@ -4,13 +4,16 @@ from ..schemas import transacao_schema
 from flask import request, make_response, jsonify
 from ..entidades import transacao
 from ..services import transacao_service, conta_service
+from flask_jwt_extended import jwt_required
 
 class TransacaoList(Resource):
+    @jwt_required
     def get(self):
         transacoes = transacao_service.listar_transacoes()
         cs = transacao_schema.TransacaoSchema(many=True)
         return make_response(cs.jsonify(transacoes), 200)
 
+    @jwt_required
     def post(self):
         cs = transacao_schema.TransacaoSchema()
         validate = cs.validate(request.json)
@@ -31,6 +34,7 @@ class TransacaoList(Resource):
                 return make_response(cs.jsonify(result), 201)
 
 class TransacaoDetail(Resource):
+    @jwt_required
     def get(self, id):
         transacao = transacao_service.listar_transacao_id(id)
         if transacao is None:
@@ -38,6 +42,7 @@ class TransacaoDetail(Resource):
         cs = transacao_schema.TransacaoSchema()
         return make_response(cs.jsonify(transacao), 200)
 
+    @jwt_required
     def put(self, id):
         transacao_bd = transacao_service.listar_transacao_id(id)
         if transacao_bd is None:
@@ -60,6 +65,7 @@ class TransacaoDetail(Resource):
                 transacao_atualizada = transacao_service.editar_transacao(transacao_bd, transacao_nova)
                 return make_response(cs.jsonify(transacao_atualizada), 200)
 
+    @jwt_required
     def delete(self, id):
         transacao = transacao_service.listar_transacao_id(id)
         if transacao is None:
