@@ -12,3 +12,6 @@ class Usuario(db.Model):
 
     def gen_senha(self):
         self.senha = pbkdf2_sha256.hash(self.senha)
+
+    def ver_senha(self, senha):
+        return pbkdf2_sha256.verify(senha, self.senha)
