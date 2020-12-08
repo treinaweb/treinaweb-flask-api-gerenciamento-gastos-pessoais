@@ -1,4 +1,4 @@
-from ..models import transacao_model
+from ..models import transacao_model, conta_model
 from api import db
 from .conta_service import alterar_saldo_conta
 
@@ -10,8 +10,9 @@ def cadastrar_transacao(transacao):
     alterar_saldo_conta(transacao.conta, transacao, 1)
     return transacao_bd
 
-def listar_transacoes():
-    transacoes = transacao_model.Transacao.query.all()
+def listar_transacoes(usuario):
+    transacoes = transacao_model.Transacao.query.join(conta_model.Conta).filter_by(usuario_id=usuario).all()
+    # transacoes = transacao_model.Transacao.query.all()
     return transacoes
 
 def listar_transacao_id(id):

@@ -4,12 +4,13 @@ from flask import request, make_response, jsonify
 from ..entidades import conta
 from ..services import conta_service, usuario_service
 from api import api
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class ContaList(Resource):
     @jwt_required
     def get(self):
-        contas = conta_service.listar_contas()
+        usuario = get_jwt_identity()
+        contas = conta_service.listar_contas(usuario=usuario)
         cs = conta_schema.ContaSchema(many=True)
         return make_response(cs.jsonify(contas), 200)
 
@@ -23,9 +24,7 @@ class ContaList(Resource):
             nome = request.json["nome"]
             descricao = request.json["descricao"]
             saldo = request.json["saldo"]
-            usuario = request.json["usuario_id"]
-            if usuario_service.listar_usuario_id(usuario) is None:
-                return make_response("Usuario não existe", 404)
+            usuario = get_jwt_identity()
             conta_nova = conta.Conta(nome=nome, descricao=descricao, saldo=saldo, usuario=usuario)
             result = conta_service.cadastrar_conta(conta_nova)
             return make_response(cs.jsonify(result), 201)
@@ -53,9 +52,7 @@ class ContaDetail(Resource):
             nome = request.json["nome"]
             descricao = request.json["descricao"]
             saldo = request.json["saldo"]
-            usuario = request.json["usuario_id"]
-            if usuario_service.listar_usuario_id(usuario) is None:
-                return make_response("Usuario não existe", 404)
+            usuario = get_jwt_identity()
             conta_nova = conta.Conta(nome=nome, descricao=descricao, saldo=saldo, usuario=usuario)
             result = conta_service.editar_conta(conta_bd, conta_nova)
             return make_response(cs.jsonify(result), 201)

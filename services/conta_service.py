@@ -8,8 +8,8 @@ def cadastrar_conta(conta):
     db.session.commit()
     return conta_bd
 
-def listar_contas():
-    contas = conta_model.Conta.query.all()
+def listar_contas(usuario):
+    contas = conta_model.Conta.query.filter_by(usuario_id=usuario).all()
     return contas
 
 def listar_conta_id(id):

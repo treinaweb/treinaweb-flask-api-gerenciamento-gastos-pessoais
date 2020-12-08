@@ -4,12 +4,13 @@ from ..schemas import transacao_schema
 from flask import request, make_response, jsonify
 from ..entidades import transacao
 from ..services import transacao_service, conta_service
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class TransacaoList(Resource):
     @jwt_required
     def get(self):
-        transacoes = transacao_service.listar_transacoes()
+        usuario = get_jwt_identity()
+        transacoes = transacao_service.listar_transacoes(usuario=usuario)
         cs = transacao_schema.TransacaoSchema(many=True)
         return make_response(cs.jsonify(transacoes), 200)
 
